@@ -211,6 +211,7 @@
     <Compile Include="RPC\Structures\Version.cs" />
     <Compile Include="RPC\Structures\VersionsSupported.cs" />
     <Compile Include="Server\ConnectionManager.cs" />
+    <Compile Include="Server\ConnectionRequestEventArgs.cs" />
     <Compile Include="Server\ConnectionState\SMB1AsyncContext.cs" />
     <Compile Include="Server\ConnectionState\SMB2AsyncContext.cs" />
     <Compile Include="Server\ConnectionState\ConnectionState.cs" />
@@ -580,24 +581,8 @@
     <Compile Include="SMB2\Structures\FileID.cs" />
     <Compile Include="SMB2\Structures\LockElement.cs" />
     <Compile Include="SMB2\Structures\NegotiateContext.cs" />
-    <Compile Include="Tests\NetBiosTests.cs" />
-    <Compile Include="Tests\NTLMAuthenticationTests.cs" />
-    <Compile Include="Tests\NTLMSigningTests.cs" />
-    <Compile Include="Tests\RC4Tests.cs" />
-    <Compile Include="Tests\RPCTests.cs" />
-    <Compile Include="Tests\SMB2SigningTests.cs" />
     <Compile Include="Utilities\LogEntry.cs" />
     <Compile Include="Utilities\SocketUtils.cs" />
-    <Compile Include="Win32\NTFileStore\NTDirectoryFileSystem.cs" />
-    <Compile Include="Win32\NTFileStore\PendingRequestCollection.cs" />
-    <Compile Include="Win32\ProcessHelper.cs" />
-    <Compile Include="Win32\Security\IntegratedNTLMAuthenticationProvider.cs" />
-    <Compile Include="Win32\Security\LoginAPI.cs" />
-    <Compile Include="Win32\Security\NetworkAPI.cs" />
-    <Compile Include="Win32\Security\SSPIHelper.cs" />
-    <Compile Include="Win32\Security\Structures\SecBuffer.cs" />
-    <Compile Include="Win32\Security\Structures\SecBufferDesc.cs" />
-    <Compile Include="Win32\ThreadingHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />

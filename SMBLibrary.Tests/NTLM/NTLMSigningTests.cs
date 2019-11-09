@@ -1,4 +1,4 @@
-/* Copyright (C) 2017 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
+/* Copyright (C) 2017-2019 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
  * 
  * You can redistribute this program and/or modify it under the terms of
  * the GNU Lesser Public License as published by the Free Software Foundation,
@@ -7,14 +7,17 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SMBLibrary.Authentication.NTLM;
 using Utilities;
 
-namespace SMBLibrary
+namespace SMBLibrary.Tests
 {
+    [TestClass]
     public class NTLMSigningTests
     {
-        public static bool TestLMMIC()
+        [TestMethod]
+        public void TestLMMIC()
         {
             string password = "Password";
             byte[] type1 = new byte[] { 0x4e, 0x54, 0x4c, 0x4d, 0x53, 0x53, 0x50, 0x00, 0x01, 0x00, 0x00, 0x00, 0x97, 0x82, 0x08, 0xe2,
@@ -51,10 +54,11 @@ namespace SMBLibrary
             byte[] mic = new HMACMD5(exportedSessionKey).ComputeHash(temp);
             byte[] expected = new byte[] { 0x4e, 0x65, 0x54, 0xe6, 0xb3, 0xdc, 0xdc, 0x16, 0xef, 0xc4, 0xd0, 0x03, 0x3b, 0x81, 0x61, 0x6f };
 
-            return ByteUtils.AreByteArraysEqual(mic, expected);
+            Assert.IsTrue(ByteUtils.AreByteArraysEqual(mic, expected));
         }
 
-        public static bool TestNTLMv1MIC()
+        [TestMethod]
+        public void TestNTLMv1MIC()
         {
             string password = "Password";
             byte[] type1 = new byte[] { 0x4e, 0x54, 0x4c, 0x4d, 0x53, 0x53, 0x50, 0x00, 0x01, 0x00, 0x00, 0x00, 0x97, 0x82, 0x08, 0xe2,
@@ -91,10 +95,11 @@ namespace SMBLibrary
             byte[] mic = new HMACMD5(exportedSessionKey).ComputeHash(temp);
             byte[] expected = new byte[] { 0xae, 0xa7, 0xba, 0x44, 0x4e, 0x93, 0xa7, 0xdb, 0xb3, 0x0c, 0x85, 0x49, 0xc2, 0x2b, 0xba, 0x9a };
 
-            return ByteUtils.AreByteArraysEqual(mic, expected);
+            Assert.IsTrue(ByteUtils.AreByteArraysEqual(mic, expected));
         }
 
-        public static bool TestNTLMv1ExtendedSessionSecurityKeyExchangeMIC()
+        [TestMethod]
+        public void TestNTLMv1ExtendedSessionSecurityKeyExchangeMIC()
         {
             string password = "Password";
             byte[] type1 = new byte[] { 0x4e, 0x54, 0x4c, 0x4d, 0x53, 0x53, 0x50, 0x00, 0x01, 0x00, 0x00, 0x00, 0x97, 0x82, 0x08, 0xe2,
@@ -137,10 +142,11 @@ namespace SMBLibrary
             byte[] mic = new HMACMD5(exportedSessionKey).ComputeHash(temp);
             byte[] expected = new byte[] { 0xc6, 0x21, 0x82, 0x59, 0x83, 0xda, 0xc7, 0xe7, 0xfa, 0x96, 0x44, 0x67, 0x16, 0xc3, 0xb3, 0x5b };
 
-            return ByteUtils.AreByteArraysEqual(mic, expected);
+            Assert.IsTrue(ByteUtils.AreByteArraysEqual(mic, expected));
         }
 
-        public static bool TestNTLMv2KeyExchangeMIC()
+        [TestMethod]
+        public void TestNTLMv2KeyExchangeMIC()
         {
             byte[] responseKeyNT = NTLMCryptography.NTOWFv2("Password", "User", "TAL-VM6");
             byte[] type1 = new byte[] { 0x4e, 0x54, 0x4c, 0x4d, 0x53, 0x53, 0x50, 0x00, 0x01, 0x00, 0x00, 0x00, 0x97, 0x82, 0x08, 0xe2,
@@ -198,7 +204,15 @@ namespace SMBLibrary
             byte[] mic = new HMACMD5(exportedSessionKey).ComputeHash(temp);
             byte[] expected = new byte[] { 0x82, 0x3c, 0xff, 0x48, 0xa9, 0x03, 0x13, 0x4c, 0x33, 0x3c, 0x09, 0x87, 0xf3, 0x16, 0x59, 0x89 };
 
-            return ByteUtils.AreByteArraysEqual(mic, expected);
+            Assert.IsTrue(ByteUtils.AreByteArraysEqual(mic, expected));
+        }
+
+        public void TestAll()
+        {
+            TestLMMIC();
+            TestNTLMv1MIC();
+            TestNTLMv1ExtendedSessionSecurityKeyExchangeMIC();
+            TestNTLMv2KeyExchangeMIC();
         }
 
         private static byte[] GetExportedSessionKey(byte[] sessionBaseKey, AuthenticateMessage message, byte[] serverChallenge, byte[] lmowf)

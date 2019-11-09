@@ -378,6 +378,12 @@ namespace SMBLibrary
                 return NTStatus.STATUS_ACCESS_DENIED;
             }
 
+            if (offset >= stream.Length)
+            {
+                Log(Severity.Verbose, "ReadFile: Cannot read from '{0}', offset {1} is out of range.", path, offset);
+                return NTStatus.STATUS_END_OF_FILE;
+            }
+
             int bytesRead;
             try
             {

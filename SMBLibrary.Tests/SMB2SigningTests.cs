@@ -1,4 +1,4 @@
-/* Copyright (C) 2017 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
+/* Copyright (C) 2017-2019 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
  * 
  * You can redistribute this program and/or modify it under the terms of
  * the GNU Lesser Public License as published by the Free Software Foundation,
@@ -7,13 +7,16 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Utilities;
 
-namespace SMBLibrary
+namespace SMBLibrary.Tests
 {
+    [TestClass]
     public class SMB2SigningTests
     {
-        public static bool Test1()
+        [TestMethod]
+        public void Test1()
         {
             byte[] exportedSessionKey = new byte[] { 0xD3, 0x83, 0x54, 0xCC, 0x37, 0x43, 0x39, 0xF0, 0x52, 0x4F, 0x78, 0x91, 0x46, 0x78, 0x99, 0x21 };
 
@@ -28,10 +31,11 @@ namespace SMBLibrary
             byte[] signature = new HMACSHA256(exportedSessionKey).ComputeHash(message);
             signature = ByteReader.ReadBytes(signature, 0, 16);
             byte[] expected = new byte[] { 0xfb, 0xd2, 0x84, 0x34, 0x03, 0x24, 0xc6, 0x2f, 0xbe, 0xbb, 0x65, 0xdd, 0x10, 0x51, 0xf3, 0xae };
-            return ByteUtils.AreByteArraysEqual(signature, expected);
+            Assert.IsTrue(ByteUtils.AreByteArraysEqual(signature, expected));
         }
 
-        public static bool Test2()
+        [TestMethod]
+        public void Test2()
         {
             byte[] exportedSessionKey = new byte[] { 0x04, 0xE7, 0x07, 0x57, 0x1F, 0x8E, 0x03, 0x53, 0xB7, 0x7A, 0x94, 0xC3, 0x65, 0x3B, 0x87, 0xB5 };
 
@@ -46,7 +50,13 @@ namespace SMBLibrary
             byte[] signature = new HMACSHA256(exportedSessionKey).ComputeHash(message);
             signature = ByteReader.ReadBytes(signature, 0, 16);
             byte[] expected = new byte[] { 0xa1, 0x64, 0xff, 0xe5, 0x3d, 0x68, 0x11, 0x98, 0x1f, 0x38, 0x67, 0x72, 0xe3, 0x87, 0xe0, 0x6f };
-            return ByteUtils.AreByteArraysEqual(signature, expected);
+            Assert.IsTrue(ByteUtils.AreByteArraysEqual(signature, expected));
+        }
+
+        public void TestAll()
+        {
+            Test1();
+            Test2();
         }
     }
 }

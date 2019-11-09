@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SMBServer")]
+[assembly: AssemblyTitle("SMBLibrary.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Tal Aloni")]
-[assembly: AssemblyProduct("SMBServer")]
+[assembly: AssemblyProduct("SMBLibrary.Tests")]
 [assembly: AssemblyCopyright("Copyright © Tal Aloni 2014-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6efa6101-f82c-4798-99a6-11e4ee2f2588")]
+[assembly: Guid("8ab9297a-1e84-4d7e-a080-cf2fbaf9af1d")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.3.9.0")]
-[assembly: AssemblyFileVersion("1.3.9.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

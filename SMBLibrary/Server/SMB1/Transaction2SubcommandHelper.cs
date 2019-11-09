@@ -1,4 +1,4 @@
-/* Copyright (C) 2014-2017 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
+/* Copyright (C) 2014-2019 Tal Aloni <tal.aloni.il@gmail.com>. All rights reserved.
  * 
  * You can redistribute this program and/or modify it under the terms of
  * the GNU Lesser Public License as published by the Free Software Foundation,
@@ -131,7 +131,7 @@ namespace SMBLibrary.Server.SMB1
             return response;
         }
 
-        internal static Transaction2QueryFSInformationResponse GetSubcommandResponse(SMB1Header header, Transaction2QueryFSInformationRequest subcommand, ISMBShare share, SMB1ConnectionState state)
+        internal static Transaction2QueryFSInformationResponse GetSubcommandResponse(SMB1Header header, uint maxDataCount, Transaction2QueryFSInformationRequest subcommand, ISMBShare share, SMB1ConnectionState state)
         {
             SMB1Session session = state.GetSession(header.UID);
             if (share is FileSystemShare)
@@ -170,6 +170,12 @@ namespace SMBLibrary.Server.SMB1
                 }
                 state.LogToServer(Severity.Information, "GetFileSystemInformation on '{0}' succeeded. Information level: {1}", share.Name, subcommand.QueryFSInformationLevel);
                 response.SetQueryFSInformation(queryFSInformation, header.UnicodeFlag);
+            }
+
+            if (response.InformationBytes.Length > maxDataCount)
+            {
+                header.Status = NTStatus.STATUS_BUFFER_OVERFLOW;
+                response.InformationBytes = ByteReader.ReadBytes(response.InformationBytes, 0, (int)maxDataCount);
             }
             return response;
         }
@@ -224,7 +230,7 @@ namespace SMBLibrary.Server.SMB1
             return new Transaction2SetFSInformationResponse();
         }
 
-        internal static Transaction2QueryPathInformationResponse GetSubcommandResponse(SMB1Header header, Transaction2QueryPathInformationRequest subcommand, ISMBShare share, SMB1ConnectionState state)
+        internal static Transaction2QueryPathInformationResponse GetSubcommandResponse(SMB1Header header, uint maxDataCount, Transaction2QueryPathInformationRequest subcommand, ISMBShare share, SMB1ConnectionState state)
         {
             SMB1Session session = state.GetSession(header.UID);
             string path = subcommand.FileName;
@@ -275,10 +281,16 @@ namespace SMBLibrary.Server.SMB1
                 state.LogToServer(Severity.Information, "GetFileInformation on '{0}{1}' succeeded. Information level: {2}", share.Name, path, subcommand.QueryInformationLevel);
                 response.SetQueryInformation(queryInformation);
             }
+
+            if (response.InformationBytes.Length > maxDataCount)
+            {
+                header.Status = NTStatus.STATUS_BUFFER_OVERFLOW;
+                response.InformationBytes = ByteReader.ReadBytes(response.InformationBytes, 0, (int)maxDataCount);
+            }
             return response;
         }
 
-        internal static Transaction2QueryFileInformationResponse GetSubcommandResponse(SMB1Header header, Transaction2QueryFileInformationRequest subcommand, ISMBShare share, SMB1ConnectionState state)
+        internal static Transaction2QueryFileInformationResponse GetSubcommandResponse(SMB1Header header, uint maxDataCount, Transaction2QueryFileInformationRequest subcommand, ISMBShare share, SMB1ConnectionState state)
         {
             SMB1Session session = state.GetSession(header.UID);
             OpenFileObject openFile = session.GetOpenFileObject(subcommand.FID);
@@ -330,6 +342,12 @@ namespace SMBLibrary.Server.SMB1
                 }
                 state.LogToServer(Severity.Information, "GetFileInformation on '{0}{1}' succeeded. Information level: {2}. (FID: {3})", share.Name, openFile.Path, subcommand.QueryInformationLevel, subcommand.FID);
                 response.SetQueryInformation(queryInformation);
+            }
+
+            if (response.InformationBytes.Length > maxDataCount)
+            {
+                header.Status = NTStatus.STATUS_BUFFER_OVERFLOW;
+                response.InformationBytes = ByteReader.ReadBytes(response.InformationBytes, 0, (int)maxDataCount);
             }
             return response;
         }
